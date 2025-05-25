@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torchvision import datasets, transforms # Để tải và xử lý dữ liệu MNIST
+from torchvision import datasets, transforms
 from torch.utils.data import DataLoader # Để tạo các batch dữ liệu
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,7 +10,7 @@ import numpy as np
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # --- Bước 1: Định nghĩa các tham số ---
-batch_size = 100
+batch_size = 64
 epochs = 10
 learning_rate = 0.001
 input_size = 28 * 28 # Kích thước ảnh MNIST
@@ -26,25 +26,25 @@ transform = transforms.Compose([
 ])
 
 # Tải dữ liệu huấn luyện
-train_dataset = datasets.MNIST(root='./data',  # Thư mục lưu dữ liệu
-                               train=True,     # Lấy tập huấn luyện
-                               download=True,  # Tải về nếu chưa có
-                               transform=transform) # Áp dụng phép biến đổi
+train_dataset = datasets.MNIST(root = './data',  # Thư mục lưu dữ liệu
+                               train = True,     # Lấy tập huấn luyện
+                               download = True,  # Tải về nếu chưa có
+                               transform = transform) # Áp dụng phép biến đổi
 
 # Tải dữ liệu kiểm tra
-test_dataset = datasets.MNIST(root='./data',
-                              train=False,    # Lấy tập kiểm tra
-                              download=True,
-                              transform=transform)
+test_dataset = datasets.MNIST(root = './data',
+                              train = False,    # Lấy tập kiểm tra
+                              download = True,
+                              transform = transform)
 
 # Tạo DataLoaders để quản lý việc tạo batch và xáo trộn dữ liệu
-train_loader = DataLoader(dataset=train_dataset,
-                          batch_size=batch_size,
-                          shuffle=True) # Xáo trộn dữ liệu huấn luyện sau mỗi epoch
+train_loader = DataLoader(dataset = train_dataset,
+                          batch_size = batch_size,
+                          shuffle = True) # Xáo trộn dữ liệu huấn luyện sau mỗi epoch
 
-test_loader = DataLoader(dataset=test_dataset,
-                         batch_size=batch_size,
-                         shuffle=False) # Không cần xáo trộn dữ liệu kiểm tra
+test_loader = DataLoader(dataset = test_dataset,
+                         batch_size = batch_size,
+                         shuffle = False) # Không cần xáo trộn dữ liệu kiểm tra
 
 # --- Bước 3: Xây dựng mô hình Mạng Nơ-ron Đơn giản (MLP) ---
 class NeuralNet(nn.Module):
@@ -57,7 +57,7 @@ class NeuralNet(nn.Module):
 
     def forward(self, x):
         x = self.flatten(x)    # Làm phẳng ảnh
-        out = self.fc1(x)      # Lớp ẩn 1
+        out = self.fc1(x)      # Lớp ẩn
         out = self.relu(out)   # Kích hoạt ReLU
         out = self.fc2(out)    # Lớp đầu ra (logits)
         return out
@@ -69,7 +69,7 @@ print(model)
 # --- Bước 4: Định nghĩa Hàm mất mát và Trình tối ưu hóa ---
 criterion = nn.CrossEntropyLoss() # Hàm mất mát: CrossEntropyLoss kết hợp nn.LogSoftmax() và nn.NLLLoss()
 
-# Trình tối ưu hóa: Adam (một lựa chọn phổ biến và hiệu quả)
+# Trình tối ưu hóa: Adam 
 optimizer = optim.Adam(model.parameters(), lr = learning_rate)
 
 # --- Bước 5: Huấn luyện mô hình ---
