@@ -8,8 +8,6 @@ import numpy as np
 import os
 from multiprocessing import freeze_support # Thêm dòng này
 
-# --- Bước 0: Cấu hình thiết bị (CPU hoặc GPU nếu có) ---
-# (Có thể để ở đây hoặc trong if __name__ == '__main__')
 if torch.cuda.is_available():
     device = torch.device("cuda")
     print(f"Đang sử dụng GPU: {torch.cuda.get_device_name(0)}")
@@ -17,7 +15,6 @@ else:
     device = torch.device("cpu")
     print("GPU không khả dụng, đang sử dụng CPU.")
 
-# --- Định nghĩa lớp mô hình và các hàm có thể để ở ngoài ---
 class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(NeuralNet, self).__init__()
@@ -33,7 +30,7 @@ class NeuralNet(nn.Module):
         out = self.fc2(out)
         return out
 
-def imshow(img, title=""): # Hàm này cũng có thể để ngoài
+def imshow(img, title=""):
     img = img.cpu()
     img = img * 0.3081 + 0.1307
     npimg = img.numpy()
@@ -43,12 +40,9 @@ def imshow(img, title=""): # Hàm này cũng có thể để ngoài
 
 # --- Phần code chính thực thi ---
 if __name__ == '__main__':
-    # Thêm dòng này, đặc biệt quan trọng cho Windows khi tạo executable
-    # Dù không tạo executable, nó vẫn là good practice cho multiprocessing trên Windows
     freeze_support()
 
-    # --- Bước 1: Định nghĩa các tham số ---
-    batch_size = 100
+    batch_size = 64
     epochs = 10
     learning_rate = 0.001
     input_size = 28 * 28
@@ -56,7 +50,6 @@ if __name__ == '__main__':
     num_classes = 10
     MODEL_SAVE_FILENAME = "Trained_GPU_Aug.pth"
 
-    # --- Bước 2: Tải và chuẩn bị dữ liệu MNIST ---
     train_transform = transforms.Compose([
         transforms.RandomRotation(degrees=10),
         transforms.ToTensor(),
@@ -69,7 +62,6 @@ if __name__ == '__main__':
     train_dataset = datasets.MNIST(root='./data', train=True, download=True, transform=train_transform)
     test_dataset = datasets.MNIST(root='./data', train=False, download=True, transform=test_transform)
 
-    # Kiểm tra device một lần nữa bên trong if __name__ == '__main__' để num_workers được set đúng
     current_device_type = device.type
     train_loader = DataLoader(dataset=train_dataset,
                               batch_size=batch_size,
