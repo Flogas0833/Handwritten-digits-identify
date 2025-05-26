@@ -44,7 +44,7 @@ print("\nĐang khởi tạo mô hình SVM...")
 # Thường cần tinh chỉnh các tham số này bằng GridSearchCV hoặc RandomizedSearchCV.
 
 # Ví dụ về một cấu hình có thể hoạt động tốt:
-svm_model = SVC(kernel='rbf', C=10, gamma=0.01, random_state=42, verbose=True)
+svm_model = SVC(kernel='rbf', C=10, gamma=0.001, random_state=42, verbose=True)
 
 print("Đang huấn luyện mô hình SVM (có thể mất rất nhiều thời gian)...")
 svm_model.fit(X_train, y_train)
